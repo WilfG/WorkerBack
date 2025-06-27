@@ -119,7 +119,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-
+        Log::info('User found for verification', ['user_id' => $user->id ?? null]);
         if (!$user || $user->verification_code !== $request->code) {
             return response()->json(['message' => 'Code invalide ou expiré.'], 422);
         }
