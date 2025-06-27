@@ -165,6 +165,7 @@ class AuthController extends Controller
 
     public function completeProfile(Request $request)
     {
+        Log::info('Complete profile request received', ['request' => $request->all()]);
         $request->validate([
             'email' => 'required|email|exists:users,email',
             'description' => 'required|string',

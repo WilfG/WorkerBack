@@ -29,10 +29,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/webhook/stripe', [SubscriptionController::class, 'handleWebhook']);
 Route::get('/user', [AuthController::class, 'user']);
+Route::post('/auth/complete-profile', [AuthController::class, 'completeProfile']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
-    Route::post('/auth/complete-profile', [AuthController::class, 'completeProfile']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/subscription/create-checkout', [SubscriptionController::class, 'createCheckout']);
 
