@@ -18,30 +18,13 @@ class WorkerController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = User::where('user_type', 'ARTISAN')
-                        ->where('status', true);
-
-            if ($request->filled('category')) {
-                $query->whereHas('categories', function($q) use ($request) {
-                    $q->where('name', $request->category);
-                });
-            }
-
-            $workers = $query->select([
-                'users.id',
-                'users.name',
-                'users.email',
-                'users.phone_number',
-                'users.profile_photo as avatar',
-                'users.description',
-                'users.hourly_rate',
-                'users.years_experience',
-                DB::raw('(SELECT COUNT(*) FROM jobs WHERE jobs.worker_id = users.id AND jobs.status = "completed") as completed_jobs'),
-                DB::raw('COALESCE((SELECT AVG(rating) FROM ratings WHERE ratings.worker_id = users.id), 0) as average_rating')
-            ])
-            ->withCount(['ratings as total_ratings'])
-            ->with(['categories:id,name'])
-            ->get();
+            $workers = User::where('role', 'worker')
+                ->where('profession_id', $request->profession_id)
+                ->with(['profession', 'ratings'])
+                // ->withAvg('ratings', 'rating')
+                ->withCount(['completedJobs'])
+                ->get();
+            Log::info('Fetched workers', ['count' => $workers->count()]);
 
             return response()->json($workers);
         } catch (\Exception $e) {
@@ -66,7 +49,13 @@ class WorkerController extends Controller
      */
     public function show(string $id)
     {
-        //
+       $worker = User::where('role', 'worker')
+            ->with(['profession', 'ratings'])
+            ->withAvg('ratings', 'rating')
+            ->withCount(['completedJobs'])
+            ->findOrFail($id);
+
+        return response()->json($worker);
     }
 
     /**

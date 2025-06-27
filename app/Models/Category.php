@@ -9,9 +9,14 @@ class Category extends Model
 {
     use HasFactory;
 
-     public function categories()
+    public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function professions()
+    {
+        return $this->hasMany(Profession::class);
     }
 
     public function ratings()

@@ -17,6 +17,10 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->enum('status', ['pending', 'in_progress', 'completed', 'cancelled'])
                 ->default('pending');
+            $table->foreignId('profession_id')->constrained();
+            $table->string('location');
+            $table->timestamp('deadline')->nullable();
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }

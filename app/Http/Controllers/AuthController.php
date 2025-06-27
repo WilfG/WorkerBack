@@ -3,24 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserWorkImage;
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
+
+
+
     public function register(Request $request)
     {
-        // var_dump($request->all());die;
+        Log::info('Registration request received', ['request' => $request->all()]);
         $validation = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => ['required', 'confirmed', Password::min(8)],
             'phone_number' => 'required|string',
-            'user_type' => 'required|in:CLIENT,ARTISAN',
+            'user_type' => 'required|in:CLIENT,WORKER',
+            'profession_id' => 'nullable|exists:professions,id',
         ]);
 
         if ($validation->fails()) {
@@ -44,15 +51,21 @@ class AuthController extends Controller
             ], 409);
         }
 
+        $type = $request->user_type === 'WORKER' ? 'ARTISAN' : 'CLIENT';
+        $role = $request->user_type === 'WORKER' ? 'worker' : 'client';
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'phone_number' => $request->phone_number,
-            'user_type' => $request->user_type,
+            'user_type' => $type,
+            'role' => $role,
+            'profession_id' => $request->profession_id,
+            'status' => 0, // Default status is 0 (not verified)
         ]);
 
-        $user->notify(new VerifyEmailNotification);
+        $code = rand(100000, 999999); // Generate a random verification code
+        $user->notify(new VerifyEmailNotification($code));
 
         Log::info('User created', ['user_id' => $user->id]); // Debug log
 
@@ -95,19 +108,24 @@ class AuthController extends Controller
 
     public function verifyEmail(Request $request)
     {
-        $user = User::find($request->id);
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'code' => 'required|string'
+        ]);
 
-        if (!$user || !hash_equals(sha1($user->getEmailForVerification()), $request->hash)) {
-            return response()->json(['message' => 'Lien de vérification invalide'], 400);
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || $user->verification_code !== $request->code) {
+            return response()->json(['message' => 'Code invalide ou expiré.'], 422);
         }
 
-        if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email déjà vérifié'], 400);
-        }
+        $user->is_verified = true;
+        $user->verification_code = null; // Clear the code after verification
+        $user->status = 1; // Set status to verified
+        $user->email_verified_at = now(); // Set the email verified timestamp
+        $user->save();
 
-        $user->markEmailAsVerified();
-
-        return response()->json(['message' => 'Email vérifié avec succès']);
+        return response()->json(['message' => 'Email vérifié avec succès.']);
     }
 
     public function resendVerification(Request $request)
@@ -128,6 +146,7 @@ class AuthController extends Controller
         return response()->json(['message' => 'Email de vérification renvoyé']);
     }
 
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -137,5 +156,41 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function completeProfile(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'description' => 'required|string',
+            'certification' => 'nullable|file|mimes:jpeg,png,jpg',
+            'images.*' => 'nullable|file|mimes:jpeg,png,jpg',
+        ]);
+
+        $user = User::where('email', $request->email)->firstOrFail();
+
+        // Save description
+        $user->description = $request->description;
+
+        // Save certification file
+        if ($request->hasFile('certification')) {
+            $certPath = $request->file('certification')->store('certifications', 'public');
+            $user->certification = $certPath;
+        }
+
+        $user->save();
+
+        // Save work images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $img) {
+                $imgPath = $img->store('work_images', 'public');
+                UserWorkImage::create([
+                    'user_id' => $user->id,
+                    'image' => $imgPath,
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Profil complété avec succès']);
     }
 }
