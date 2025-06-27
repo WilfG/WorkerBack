@@ -53,6 +53,7 @@ class AuthController extends Controller
 
         $type = $request->user_type === 'WORKER' ? 'ARTISAN' : 'CLIENT';
         $role = $request->user_type === 'WORKER' ? 'worker' : 'client';
+        $code = rand(100000, 999999); // Generate a random verification code
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -62,9 +63,12 @@ class AuthController extends Controller
             'role' => $role,
             'profession_id' => $request->profession_id,
             'status' => 0, // Default status is 0 (not verified)
+            'verification_code' => $code, // Store the verification code
+            'is_verified' => false, // Default is not verified
+            'email_verified_at' => null, // Email verification timestamp
         ]);
 
-        $code = rand(100000, 999999); // Generate a random verification code
+        
         $user->notify(new VerifyEmailNotification($code));
 
         Log::info('User created', ['user_id' => $user->id]); // Debug log
@@ -108,6 +112,7 @@ class AuthController extends Controller
 
     public function verifyEmail(Request $request)
     {
+        Log::info('Email verification request received', ['request' => $request->all()]);
         $request->validate([
             'email' => 'required|email|exists:users,email',
             'code' => 'required|string'
