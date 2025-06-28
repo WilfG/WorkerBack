@@ -68,7 +68,7 @@ class AuthController extends Controller
             'email_verified_at' => null, // Email verification timestamp
         ]);
 
-        
+
         $user->notify(new VerifyEmailNotification($code));
 
         Log::info('User created', ['user_id' => $user->id]); // Debug log
@@ -168,15 +168,15 @@ class AuthController extends Controller
         Log::info('Complete profile request received', ['request' => $request->all()]);
         $request->validate([
             'email' => 'required|email|exists:users,email',
-            'description' => 'required|string',
+            'bio' => 'required|string',
             'certification' => 'nullable|file|mimes:jpeg,png,jpg',
             'images.*' => 'nullable|file|mimes:jpeg,png,jpg',
         ]);
 
         $user = User::where('email', $request->email)->firstOrFail();
-
+        Log::info('User found for profile completion', ['user_id' => $user->id]);
         // Save description
-        $user->description = $request->description;
+        $user->description = $request->bio;
 
         // Save certification file
         if ($request->hasFile('certification')) {
