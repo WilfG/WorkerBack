@@ -33,6 +33,7 @@ Route::post('/auth/complete-profile', [AuthController::class, 'completeProfile']
 Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
 Route::post('/auth/resend-verification', [AuthController::class, 'resendVerification']);
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/subscription/create-checkout', [SubscriptionController::class, 'createCheckout']);

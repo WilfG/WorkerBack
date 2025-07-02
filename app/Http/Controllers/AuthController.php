@@ -130,25 +130,32 @@ class AuthController extends Controller
         $user->email_verified_at = now(); // Set the email verified timestamp
         $user->save();
 
-        return response()->json(['message' => 'Email vérifié avec succès.']);
+        return response()->json([
+            'message' => 'Email vérifié avec succès.'
+
+        ], 200);
     }
 
     public function resendVerification(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
-        $user = User::where('email', $request->email)->first();
+        Log::info('Resend verification request received', ['request' => $request->all()]);
+        $validation = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ]);
 
-        if (!$user) {
-            return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        if ($validation->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validation->errors()
+            ], 422);
         }
 
-        if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email déjà vérifié'], 400);
-        }
-
-        $user->notify(new VerifyEmailNotification);
-
-        return response()->json(['message' => 'Email de vérification renvoyé']);
+        $user = User::where('email', $request->email)->firstOrFail();
+        $code = rand(100000, 999999);
+        $user->verification_code = $code;
+        $user->save();
+        $user->notify(new VerifyEmailNotification($code));
+        return response()->json(['message' => 'Code renvoyé avec succès.']);
     }
 
 
