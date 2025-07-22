@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\CountryController;
 use App\Http\Controllers\API\JobController;
 use App\Http\Controllers\API\ProfessionController;
 use App\Http\Controllers\API\WorkerController;
@@ -32,7 +33,7 @@ Route::get('/user', [AuthController::class, 'user']);
 Route::post('/auth/complete-profile', [AuthController::class, 'completeProfile']);
 Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
 Route::post('/auth/resend-verification', [AuthController::class, 'resendVerification']);
-
+Route::get('/countries', [CountryController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
