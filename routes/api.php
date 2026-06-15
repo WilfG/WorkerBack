@@ -39,8 +39,11 @@ Route::post('/auth/complete-profile', [AuthController::class, 'completeProfile']
 Route::post('/auth/verify-email', [AuthController::class, 'verifyEmail']);
 Route::post('/auth/resend-verification', [AuthController::class, 'resendVerification']);
 Route::get('/countries', [CountryController::class, 'index']);
+<<<<<<< HEAD
 Route::post('/fedapay/callback', [FedaPayController::class, 'handleCallback']);
 
+=======
+>>>>>>> 5ee77f1eea3300f198cf687a3149d2cab64347a2
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

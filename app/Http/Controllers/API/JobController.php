@@ -103,8 +103,7 @@ class JobController extends Controller
         }
 
         try {
-            DB::beginTransaction();
-
+           
             $job = Job::create([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -135,14 +134,12 @@ class JobController extends Controller
             $this->notifySubscribedWorkersByEmail($job);
 
 
-            DB::commit();
-
+            
             return response()->json([
                 'message' => 'Job created successfully',
                 'job' => $job->load('images')
             ], 201);
         } catch (\Exception $e) {
-            DB::rollBack();
             Log::error('Job creation failed', [
                 'error' => $e->getMessage(),
                 'timestamp' => now(),
