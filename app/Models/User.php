@@ -41,6 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'subscription_end_date' => 'datetime',
+        'is_subscribed' => 'boolean',
+
     ];
 
     public function categories()
@@ -66,6 +69,14 @@ class User extends Authenticatable
         return $this->belongsTo(Profession::class);
     }
 
+
+    // Add to User model's relationships:
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+
     public function ratings()
     {
         return $this->hasMany(Rating::class, 'worker_id');
@@ -81,5 +92,95 @@ class User extends Authenticatable
     public function jobApplications()
     {
         return $this->hasMany(JobApplication::class, 'worker_id');
+    }
+
+
+    // Add this relationship method to your User model
+    public function pushToken()
+    {
+        return $this->hasOne(UserPushToken::class);
+    }
+
+    // Add this relationship method to your User model  
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class)->orderBy('created_at', 'desc');
+    }
+
+    // Add this relationship method to your User model
+    public function unreadNotifications()
+    {
+        return $this->hasMany(Notification::class)->where('read', false);
+    }
+
+    // Add these methods to your User model for notification preferences
+    public function getNotificationPreference($type)
+    {
+        // You can expand this to store user preferences in database
+        return true; // For now, all notifications are enabled
+    }
+
+    public function shouldReceivePushNotifications()
+    {
+        return $this->pushToken !== null;
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+
+    // Add this method to check if subscription is active:
+    public function hasActiveSubscription()
+    {
+        return $this->is_subscribed &&
+            $this->subscription_end_date &&
+            $this->subscription_end_date->isFuture();
+    }
+
+    // Add this method to get subscription status:
+    public function getSubscriptionStatus()
+    {
+        if (!$this->is_subscribed) {
+            return 'inactive';
+        }
+
+        if (!$this->subscription_end_date) {
+            return 'active'; // Lifetime subscription
+        }
+
+        if ($this->subscription_end_date->isFuture()) {
+            return 'active';
+        }
+
+        return 'expired';
+    }
+
+
+    public function workImages()
+    {
+        return $this->hasMany(UserWorkImage::class);
+    }
+    
+        /**
+     * Check if user has applied to a specific job
+     *
+     * @param Job $job
+     * @return bool
+     */
+    public function hasApplied(Job $job): bool
+    {
+        return $this->applications()
+            ->where('job_id', $job->id)
+            ->exists();
+    }
+    
+    /**
+     * Get user's job applications
+     */
+    public function applications()
+    {
+        return $this->hasMany(Application::class, 'worker_id');
     }
 }

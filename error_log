@@ -1,0 +1,16 @@
+[27-Jun-2025 14:06:12 UTC] PHP Warning:  require(/home/wiltjjew/work.wiltek-software.com/../vendor/autoload.php): Failed to open stream: No such file or directory in /home/wiltjjew/work.wiltek-software.com/index.php on line 34
+[27-Jun-2025 14:06:12 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/wiltjjew/work.wiltek-software.com/../vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/wiltjjew/work.wiltek-software.com/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/wiltjjew/work.wiltek-software.com/index.php on line 34
+[27-Jun-2025 14:06:46 UTC] PHP Warning:  require(/home/wiltjjew/work.wiltek-software.com/vendor/autoload.php): Failed to open stream: No such file or directory in /home/wiltjjew/work.wiltek-software.com/index.php on line 34
+[27-Jun-2025 14:06:46 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/wiltjjew/work.wiltek-software.com/vendor/autoload.php' (include_path='.:/opt/alt/php82/usr/share/pear:/opt/alt/php82/usr/share/php:/usr/share/pear:/usr/share/php') in /home/wiltjjew/work.wiltek-software.com/index.php:34
+Stack trace:
+#0 {main}
+  thrown in /home/wiltjjew/work.wiltek-software.com/index.php on line 34
+[07-Aug-2025 18:52:14 UTC] PHP Fatal error:  Cannot use App\Notifications\JobDeliveredNotification as JobDeliveredNotification because the name is already in use in /home/wiltjjew/work.wiltek-software.com/app/Http/Controllers/API/JobController.php on line 14
+[07-Aug-2025 18:53:02 UTC] PHP Fatal error:  Cannot use App\Notifications\JobValidatedNotification as JobValidatedNotification because the name is already in use in /home/wiltjjew/work.wiltek-software.com/app/Http/Controllers/API/JobController.php on line 14
+[07-Aug-2025 18:53:33 UTC] PHP Fatal error:  Cannot use App\Notifications\JobRejectedNotification as JobRejectedNotification because the name is already in use in /home/wiltjjew/work.wiltek-software.com/app/Http/Controllers/API/JobController.php on line 14
+[14-Aug-2025 15:45:53 UTC] PHP Fatal error:  Cannot declare class App\Http\Controllers\RatingController, because the name is already in use in /home/wiltjjew/work.wiltek-software.com/app/Http/Controllers/API/RatingController.php on line 11
+[26-Aug-2025 16:48:43 UTC] PHP Fatal error:  Constant expression contains invalid operations in /home/wiltjjew/work.wiltek-software.com/app/Http/Controllers/FedaPayController.php on line 19
+[02-Sep-2025 19:09:26 UTC] PHP Fatal error:  Cannot redeclare App\Models\Job::client() in /home/wiltjjew/work.wiltek-software.com/app/Models/Job.php on line 43

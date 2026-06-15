@@ -35,7 +35,7 @@ class VerifyEmailNotification extends Notification
     public function toMail(object $notifiable): MailMessage
 {
     return (new MailMessage)
-        ->subject('Bienvenue sur WorkerApp - Vérification de votre adresse email')
+        ->subject('Bienvenue sur FP-ART - Vérification de votre adresse email')
         ->greeting('Bienvenue sur WorkerApp !')
         ->line('Merci de vous être inscrit. Voici votre code de vérification :')
         ->line("**{$this->code}**")

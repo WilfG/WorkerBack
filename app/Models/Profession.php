@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Profession extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'category', 'icon'];
+    protected $fillable = ['name', 'category_id', 'icon'];
 
     public function workers()
     {
@@ -18,5 +18,10 @@ class Profession extends Model
       public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
     }
 }

@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('client_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('worker_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('job_id')->constrained('jobs')->onDelete('cascade');
             $table->integer('rating')->comment('Rating from 1-5');
             $table->text('comment')->nullable();
             $table->timestamps();

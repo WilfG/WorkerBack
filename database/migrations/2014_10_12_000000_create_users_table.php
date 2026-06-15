@@ -23,6 +23,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('status')->default(true);
+            $table->integer('country_id')->nullable();
+            $table->string('reference_name')->nullable();
+            $table->string('reference_number')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

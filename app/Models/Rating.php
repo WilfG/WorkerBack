@@ -9,7 +9,9 @@ class Rating extends Model
 {
     use HasFactory;
 
-     public function job()
+    protected $guarded = [];
+
+    public function job()
     {
         return $this->belongsTo(Job::class);
     }

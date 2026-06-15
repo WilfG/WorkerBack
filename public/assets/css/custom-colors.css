@@ -1,0 +1,104 @@
+:root {
+    --primary-color: #0E4561;
+    --secondary-color: #BB9773;
+    --accent-color: #E17119;
+    --primary-text: #333333;
+    --light-text: #ffffff;
+    --light-bg: #f5f5f5;
+}
+
+/* Background Colors */
+.bg-primary { background-color: var(--primary-color) !important; }
+.bg-secondary { background-color: var(--secondary-color) !important; }
+.bg-accent { background-color: var(--accent-color) !important; }
+
+/* Text Colors */
+.text-primary { color: var(--primary-color) !important; }
+.text-secondary { color: var(--secondary-color) !important; }
+.text-accent { color: var(--accent-color) !important; }
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--light-text);
+}
+
+.btn-primary:hover {
+    background-color: #0a3449;
+    border-color: #0a3449;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--light-text);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--light-text);
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: var(--primary-color);
+}
+
+.sidebar .nav-link {
+    color: var(--light-text);
+}
+
+.sidebar .nav-link:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Header */
+.navbar {
+    background-color: var(--light-text);
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+/* Cards */
+.card {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border-radius: 8px 8px 0 0 !important;
+}
+
+/* Tables */
+.table thead th {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border-bottom: 2px solid var(--secondary-color);
+}
+
+.table tbody tr:hover {
+    background-color: rgba(187, 151, 115, 0.1);
+}
+
+/* Pagination */
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.pagination .page-link {
+    color: var(--primary-color);
+}
+
+/* Stats Cards */
+.stats-card {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--light-text);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}

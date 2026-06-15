@@ -15,10 +15,12 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->decimal('price', 10, 2);
-            $table->enum('status', ['pending', 'in_progress', 'completed', 'cancelled'])
+            $table->enum('status', ['pending', 'in_progress', 'delivered', 'completed', 'cancelled'])
                 ->default('pending');
+            $table->text('rejection_reason')->nullable();
             $table->foreignId('profession_id')->constrained();
             $table->string('location');
+            $table->date('date_start')->nullable();
             $table->timestamp('deadline')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
