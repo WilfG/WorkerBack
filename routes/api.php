@@ -13,7 +13,6 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PushTokenController;
 use App\Http\Controllers\FedaPayController;
-use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
