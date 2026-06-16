@@ -101,7 +101,7 @@ jobs:
             php artisan route:cache
             php artisan view:cache
 
-            echo "→ Redemarrage de PHP-FPM..."
-            sudo systemctl reload php8.2-fpm
+            echo "→ Redémarrage d'Apache..."
+            sudo systemctl reload apache2
 
             echo "✅ Deploiement terminee"
