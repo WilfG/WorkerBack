@@ -94,11 +94,12 @@ jobs:
 
             echo "→ Installation des dépendances..."
             composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+            composer require fakerphp/faker
 
             echo "→ Migrations..."
             php artisan migrate --force
             php artisan db:seed --force
-            
+
             echo "→ Permissions..."
             sudo chown -R www-data:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache
