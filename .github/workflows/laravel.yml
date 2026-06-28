@@ -98,7 +98,7 @@ jobs:
 
             echo "→ Migrations..."
             php artisan config:clear
-            php artisan migrate --force
+            php artisan migrate:fresh --seed
             php artisan db:seed --force
 
             echo "→ Permissions..."
