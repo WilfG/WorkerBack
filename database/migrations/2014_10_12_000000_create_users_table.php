@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->enum('user_type', ['CLIENT', 'ARTISAN'])->default('CLIENT');
             $table->string('profile_photo')->nullable();
             $table->string('address')->nullable();

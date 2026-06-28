@@ -1,5 +1,6 @@
 name: Laravel CI/CD FRP Backend
 
+#Trigger 
 on:
   push:
     branches: [main]
@@ -63,7 +64,8 @@ jobs:
 
       - name: Lancer les migrations de test
         run: php artisan migrate --env=testing --force
-
+      - name: Lancer les seeders
+        run: php artisan db:seed --env=testing --force
       - name: Lancer les tests
         run: php artisan test --env=testing
 
@@ -95,6 +97,11 @@ jobs:
 
             echo "→ Migrations..."
             php artisan migrate --force
+            php artisan db:seed --force
+            
+            echo "→ Permissions..."
+            sudo chown -R www-data:www-data storage bootstrap/cache
+            sudo chmod -R 775 storage bootstrap/cache
 
             echo "→ Optimisation..."
             php artisan config:cache
