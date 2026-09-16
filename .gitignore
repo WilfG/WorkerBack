@@ -6,6 +6,10 @@
 /storage/*.key
 /vendor
 .env
+.env
+.env.*
+!.env.example
+.env.testing
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -17,3 +21,8 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+docker-compose.worker.env
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
