@@ -1,16 +1,12 @@
-# Créer le fichier
-echo "* text=auto eol=lf" > .gitattributes
-echo "*.sh text eol=lf" >> .gitattributes
-
-# Vérifier
-type .gitattributes
-
-*.blade.php diff=html
-*.css diff=css
-*.html diff=html
-*.md diff=markdown
-*.php diff=php
-
-/.github export-ignore
-CHANGELOG.md export-ignore
-.styleci.yml export-ignore
+*.blade.php diff=html$
+*.css diff=css$
+*.html diff=html$
+*.md diff=markdown$
+*.php diff=php$
+$
+/.github export-ignore$
+CHANGELOG.md export-ignore$
+.styleci.yml export-ignore$
+$
+* text=auto eol=lf$
+*.sh text eol=lf$
