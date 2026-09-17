@@ -1,4 +1,9 @@
-* text=auto eol=lf
+# Créer le fichier
+echo "* text=auto eol=lf" > .gitattributes
+echo "*.sh text eol=lf" >> .gitattributes
+
+# Vérifier
+type .gitattributes
 
 *.blade.php diff=html
 *.css diff=css
