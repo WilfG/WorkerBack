@@ -1,90 +1,90 @@
 name: Deploy WorkerBack
 
 on:
-  push:
-    branches: [develop]
-  workflow_dispatch:
+    push:
+        branches: [develop]
+    workflow_dispatch:
 
 jobs:
-  tests:
-    name: Tests (PHP 8.1, MySQL 8)
-    runs-on: ubuntu-latest
+    tests:
+        name: Tests (PHP 8.1, MySQL 8)
+        runs-on: ubuntu-latest
 
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: worker_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+        services:
+            mysql:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: worker_test
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=3
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: mbstring, bcmath, pdo_mysql
-          coverage: none
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.1"
+                  extensions: mbstring, bcmath, pdo_mysql
+                  coverage: none
 
-      - name: Cache Composer
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: composer-${{ hashFiles('composer.lock') }}
+            - name: Cache Composer
+              uses: actions/cache@v4
+              with:
+                  path: vendor
+                  key: composer-${{ hashFiles('composer.lock') }}
 
-      - name: Install dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+            - name: Install dependencies
+              run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Setup env for testing
-        run: |
-          cp .env.example .env.testing
-          echo "APP_ENV=testing" >> .env.testing
-          echo "DB_CONNECTION=mysql" >> .env.testing
-          echo "DB_HOST=127.0.0.1" >> .env.testing
-          echo "DB_PORT=3306" >> .env.testing
-          echo "DB_DATABASE=worker_test" >> .env.testing
-          echo "DB_USERNAME=root" >> .env.testing
-          echo "DB_PASSWORD=root" >> .env.testing
+            - name: Setup env for testing
+              run: |
+                  cp .env.example .env.testing
+                  echo "APP_ENV=testing" >> .env.testing
+                  echo "DB_CONNECTION=mysql" >> .env.testing
+                  echo "DB_HOST=127.0.0.1" >> .env.testing
+                  echo "DB_PORT=3306" >> .env.testing
+                  echo "DB_DATABASE=worker_test" >> .env.testing
+                  echo "DB_USERNAME=root" >> .env.testing
+                  echo "DB_PASSWORD=root" >> .env.testing
 
-      - name: Generate app key
-        run: php artisan key:generate --env=testing
+            - name: Generate app key
+              run: php artisan key:generate --env=testing
 
-      - name: Run migrations
-        run: php artisan migrate --env=testing --force
+            - name: Run migrations
+              run: php artisan migrate --env=testing --force
 
-      - name: Run tests
-        run: php artisan test --env=testing || echo "Aucun test exécuté"
+            - name: Run tests
+              run: php artisan test --env=testing || echo "Aucun test exécuté"
 
-  deploy:
-    name: Deploy to worker.wiltek-software.online
-    runs-on: ubuntu-latest
-    needs: tests
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    deploy:
+        name: Deploy to worker.wiltek-software.online
+        runs-on: ubuntu-latest
+        needs: tests
+        if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
 
-    steps:
-      - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.WORKER_SSH_KEY }}" > ~/.ssh/worker_key
-          chmod 600 ~/.ssh/worker_key
-          ssh-keyscan -H ${{ secrets.WORKER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+        steps:
+            - name: Setup SSH key
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "${{ secrets.WORKER_SSH_KEY }}" > ~/.ssh/worker_key
+                  chmod 600 ~/.ssh/worker_key
+                  ssh-keyscan -H ${{ secrets.WORKER_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
 
-      - name: Execute deploy on remote server
-        run: |
-          ssh -i ~/.ssh/worker_key \
-            ${{ secrets.WORKER_USER }}@${{ secrets.WORKER_HOST }} \
-            "cd /var/www/worker.wiltek-software.online && ./deploy.sh"
+            - name: Execute deploy on remote server
+              run: |
+                  ssh -i ~/.ssh/worker_key \
+                    ${{ secrets.WORKER_USER }}@${{ secrets.WORKER_HOST }} \
+                    "cd /var/www/worker.wiltek-software.online && chmod +x deploy.sh && ./deploy.sh"
 
-      - name: Verify API
-        run: |
-          sleep 3
-          curl -sf https://worker.wiltek-software.online/api/user \
-            -o /dev/null -w "HTTP %{http_code}\n" || true
+            - name: Verify API
+              run: |
+                  sleep 3
+                  curl -sf https://worker.wiltek-software.online/api/user \
+                    -o /dev/null -w "HTTP %{http_code}\n" || true
