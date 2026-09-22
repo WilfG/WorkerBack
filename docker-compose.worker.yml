@@ -31,6 +31,9 @@ services:
       MAIL_ENCRYPTION: null
       MAIL_FROM_ADDRESS: no-reply@wiltek-software.online
       MAIL_FROM_NAME: Worker
+      ADMIN_NAME: ${ADMIN_NAME}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
     volumes:
       - ./storage:/var/www/html/storage
     extra_hosts:
