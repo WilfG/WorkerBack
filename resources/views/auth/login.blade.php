@@ -10,13 +10,13 @@
     <title>Artisan Mate</title>
 
     <!-- ========== Css Files ========== -->
-    <link href="{{asset('public/assets/css/root.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/root.css')}}" rel="stylesheet">
 </head>
 <!-- END HEAD -->
 
 <!-- BEGIN BODY -->
 
-<body style="background-image: url('{{asset('public/assets/images/accueil.jpg')}}');background-repeat: no-repeat; background-size: cover;background-position: center center">
+<body style="background-image: url('{{asset('assets/images/accueil.jpg')}}');background-repeat: no-repeat; background-size: cover;background-position: center center">
 
     <div class="login-form">
         @if (session('errors'))
@@ -31,7 +31,7 @@
         @endif
         <form name="loginform" id="loginform" action="/login" method="post" style="opacity: 0.8;">
             <div class="top">
-                <img src="{{asset('public/assets/img/logo.png')}}" alt="icon" class="icon">
+                <img src="{{asset('assets/img/logo.png')}}" alt="icon" class="icon">
                 <!-- <h1>Kode</h1>
                 <h4>Bootstrap Admin Template</h4> -->
             </div>

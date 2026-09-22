@@ -302,6 +302,10 @@ body.sidebar-closed #content {
     border-color: #c45c0f !important;
 }
 
+.shadow-sm {
+    display:none !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     #sidebar {

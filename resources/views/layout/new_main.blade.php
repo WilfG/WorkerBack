@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Worker - Administration</title>
+    <title>Worker - Administration - FRP</title>
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link href="{{asset('public/assets/css/new-style.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/new-style.css')}}" rel="stylesheet">
 </head>
 <body>
     <div class="wrapper">
@@ -17,7 +17,7 @@
         <nav id="sidebar" class="active">
             <div class="sidebar-header">
                 <h3>Worker</h3>
-                <img src="{{asset('public/assets/img/logo.png')}}" alt="Logo" class="logo-small">
+                <img src="{{asset('assets/img/logo.png')}}" alt="Logo" class="logo-small">
             </div>
 
             <ul class="list-unstyled components">
@@ -100,7 +100,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{asset('public/assets/js/main.js')}}"></script>
+    <script src="{{asset('assets/js/main.js')}}"></script>
     <script>
         $(document).ready(function() {
             // État initial du sidebar (fermé sur mobile, ouvert sur desktop)
