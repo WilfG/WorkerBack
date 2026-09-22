@@ -23,6 +23,14 @@ services:
       CACHE_DRIVER: file
       SESSION_DRIVER: file
       QUEUE_CONNECTION: sync
+      MAIL_MAILER: smtp
+      MAIL_HOST: host.docker.internal
+      MAIL_PORT: 25
+      MAIL_USERNAME: null
+      MAIL_PASSWORD: null
+      MAIL_ENCRYPTION: null
+      MAIL_FROM_ADDRESS: no-reply@wiltek-software.online
+      MAIL_FROM_NAME: Worker
     volumes:
       - ./storage:/var/www/html/storage
     extra_hosts:
